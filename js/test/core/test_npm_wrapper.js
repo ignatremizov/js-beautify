@@ -37,7 +37,10 @@ describe('Pinned npm wrapper', function() {
     var log = path.join(fixture, 'installs.jsonl');
     return fs.existsSync(log) ?
       fs.readFileSync(log, 'utf8').trim().split('\n').map(function(line) {
-        return JSON.parse(line);
+        var args = JSON.parse(line);
+        // Git Bash supplies forward slashes on Windows; compare the same native path.
+        args[3] = path.normalize(args[3]);
+        return args;
       }) : [];
   }
 
