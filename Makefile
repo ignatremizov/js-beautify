@@ -26,7 +26,8 @@ serve: js/lib/*.js
 js: generate-tests js/lib/*.js
 	@echo Testing node beautify functionality...
 	./node_modules/.bin/mocha --recursive js/test && \
-		./js/test/node-src-index-tests.js
+		./js/test/node-src-index-tests.js && \
+		$(NPM) exec -- node js/test/npm-install-scripts-tests.js
 
 py: generate-tests $(BUILD_DIR)/python
 	@echo Testing python beautify functionality...

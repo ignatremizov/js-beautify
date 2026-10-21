@@ -1,7 +1,8 @@
 {
   "name": "js-beautify",
   "version": "1.15.4-iremizov.3",
-  "packageManager": "npm@11.21.1",
+  "packageManager": "npm@12.2.1",
+  "allowScripts": {},
   "description": "beautifier.io for node",
   "main": "js/index.js",
   "bin": {
