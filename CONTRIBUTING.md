@@ -11,8 +11,19 @@ Fixes and enhancements are totally welcome.  We prefer you to file an issue befo
 
 * bash
 * make
-* nodejs - v16.x or greater (with npm)
+* Node.js 24.22.1 for development, CI, and releases, with repository-local npm 11.21.1
 * python - v3.7 or greater (with pip)
+
+The JavaScript package declares Node.js >=20 for consumers because EditorConfig 3
+requires Node.js 20 or newer. The maintainer toolchain is intentionally more
+specific: CI and releases use Node.js 24.22.1 and npm 11.21.1. Consumers do not
+need the maintainer npm version to use the library.
+
+The `packageManager` field in `package.json` owns the npm pin. Run
+`./tools/npm --version` to bootstrap that version locally in `node_modules`.
+The Makefile and release scripts use this wrapper; it does not update global npm
+or automatically move to a new npm major. Use the pinned toolchain when changing
+dependencies or rebuilding release bundles.
 
 If you encounter issues and cannot build, come chat on gitter.im.  We're happy to help.
 
@@ -48,7 +59,7 @@ Also, check if your change needs any tooling updates.  For example, the CDN URLs
 
 * Run `make ci` locally after commit but before creation of Pull Request.  You may start a Pull Request even if this reports errors, but the PR will not be merged until all errors are fixed.
 * Include description of changes. Include examples of input and expected output if possible.
-* Pull requests must pass build checks on all platforms before being merged. We use Travis CI and AppVeyor to run tests on Linux and Windows across multiple versions of Node.js and Python.
+* Pull requests must pass build checks on all platforms before being merged. GitHub Actions runs tests on Linux, Windows, and macOS using the pinned Node.js toolchain and the configured Python versions.
 
 
 # Folders
@@ -100,7 +111,7 @@ We have isolated it on this separate branch to keep it from hurting the other ch
 
 # How to publish a new version
 
-NOTE: Before you publish a release make sure the latest changes have passed the Travis CI build!
+NOTE: Before you publish a release make sure the latest changes have passed the GitHub Actions CI build using the pinned maintainer toolchain!
 
 ## Setup
 
