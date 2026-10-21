@@ -146,6 +146,5 @@ class TestOptions(unittest.TestCase):
         self.assertEqual(options.wrap_line_length, 120)
 
 
-
 if __name__ == "__main__":
     unittest.main()
