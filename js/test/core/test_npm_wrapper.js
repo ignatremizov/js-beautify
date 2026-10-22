@@ -83,7 +83,7 @@ describe('Pinned npm wrapper', function() {
     fs.rmSync(fixture, { recursive: true, force: true });
   });
 
-  [null, '11.0.0', '12.0.0'].forEach(function(version) {
+  [null, '11.21.1', '12.0.0'].forEach(function(version) {
     it('installs the pin for an ordinary command with cached npm ' + (version || 'missing'), function() {
       if (version) {
         cacheVersion(version);
@@ -91,7 +91,7 @@ describe('Pinned npm wrapper', function() {
       var result = run(['audit']);
       assert.strictEqual(result.status, 0, result.stderr);
       assert.deepStrictEqual(installs(), [
-        ['i', npmPackage, '--prefix', fixture, '--no-save']
+        ['i', npmPackage, '--prefix', fixture, '--no-save', '--ignore-scripts']
       ]);
       assert.strictEqual(JSON.parse(fs.readFileSync(
         path.join(fixture, 'node_modules/npm/package.json'), 'utf8')).version, npmVersion);
@@ -103,6 +103,13 @@ describe('Pinned npm wrapper', function() {
     var result = run(['audit']);
     assert.strictEqual(result.status, 0, result.stderr);
     assert.deepStrictEqual(installs(), []);
+  });
+
+  it('keeps bootstrap diagnostics out of structured command output', function() {
+    var result = run(['pack', '--json']);
+    assert.strictEqual(result.status, 0, result.stderr);
+    assert.deepStrictEqual(JSON.parse(result.stdout), ['pack', '--json']);
+    assert.ok(result.stderr.indexOf('Ensuring repository-local ' + npmPackage) !== -1);
   });
 
   it('repairs a cached binary with missing version metadata', function() {

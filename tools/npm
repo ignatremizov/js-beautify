@@ -8,8 +8,9 @@ LOCAL_NPM_PACKAGE=$(/usr/bin/env node -p 'try { "npm@" + require(process.argv[1]
 
 # Check metadata before executing npm: a stale cached major may not support Node.
 if [ "$1" == "--version" ] || [ ! -f "${PROJECT_DIR}/node_modules/.bin/npm" ] || [ "$LOCAL_NPM_PACKAGE" != "$NPM_PACKAGE" ]; then
-    echo "Ensuring repository-local $NPM_PACKAGE is installed..."
-    /usr/bin/env npm i "$NPM_PACKAGE" --prefix "$PROJECT_DIR" --no-save || exit $?
+    echo "Ensuring repository-local $NPM_PACKAGE is installed..." >&2
+    # The ambient npm may predate approval policies; bootstrap never runs scripts.
+    /usr/bin/env npm i "$NPM_PACKAGE" --prefix "$PROJECT_DIR" --no-save --ignore-scripts >&2 || exit $?
 fi
 
 "${PROJECT_DIR}/node_modules/.bin/npm" "$@" || exit $?

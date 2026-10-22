@@ -11,12 +11,12 @@ Fixes and enhancements are totally welcome.  We prefer you to file an issue befo
 
 * bash
 * make
-* Node.js 24.22.1 for development, CI, and releases, with repository-local npm 11.21.1
+* Node.js 24.22.1 for development, CI, and releases, with repository-local npm 12.2.1
 * python - v3.7 or greater (with pip)
 
 The JavaScript package declares Node.js >=20 for consumers because EditorConfig 3
 requires Node.js 20 or newer. The maintainer toolchain is intentionally more
-specific: CI and releases use Node.js 24.22.1 and npm 11.21.1. Consumers do not
+specific: CI and releases use Node.js 24.22.1 and npm 12.2.1. Consumers do not
 need the maintainer npm version to use the library.
 
 The `packageManager` field in `package.json` owns the npm pin. Run
@@ -24,6 +24,30 @@ The `packageManager` field in `package.json` owns the npm pin. Run
 The Makefile and release scripts use this wrapper; it does not update global npm
 or automatically move to a new npm major. Use the pinned toolchain when changing
 dependencies or rebuilding release bundles.
+
+The bootstrap disables install scripts even when the ambient npm is an older
+version and sends its diagnostics to stderr so structured command output remains
+parseable. Subsequent commands use npm 12's approval policy. The current dependency
+tree needs no install scripts or native compilation, so `allowScripts` is empty.
+The checked-in `.npmrc` fails installation for unreviewed install scripts and
+rejects unknown npmrc settings. Do not bypass these checks with blanket script
+permissions. After reviewing a newly introduced dependency's scripts, use
+`./tools/npm install-scripts ls`, approve only that dependency with
+`./tools/npm install-scripts approve <package>`, and commit the resulting pinned
+approval. Run `./tools/npm rebuild` to execute the reviewed scripts.
+
+As verified on 2026-10-22, the registry's `latest` tag still selects npm 12.2.0,
+while `next-12` selects 12.2.1. This repository explicitly pins the
+[non-prerelease 12.2.1 release](https://github.com/npm/cli/releases/tag/v12.2.1)
+because it includes [bundled dependency security fixes](https://github.com/npm/cli/pull/10088)
+missing from 12.2.0. Do not replace the exact pin with a moving dist-tag.
+
+npm 12 rejects unknown or abbreviated CLI flags. Use full documented flag names
+and `--` before arguments forwarded to another command. Its `view --json` output
+is array-shaped, while `pack --json` and `publish --json` return objects keyed by
+package name; scripts consuming these outputs must use the appropriate shape.
+The package continues to use `package-lock.json`, and it does not need exceptions
+for Git or remote tarball dependencies.
 
 If you encounter issues and cannot build, come chat on gitter.im.  We're happy to help.
 
