@@ -11,12 +11,12 @@ Fixes and enhancements are totally welcome.  We prefer you to file an issue befo
 
 * bash
 * make
-* Node.js 24.22.1 for development, CI, and releases, with repository-local npm 12.2.2
+* Node.js 24.22.3 for development, CI, and releases, with repository-local npm 12.2.2
 * python - v3.7 or greater (with pip)
 
 The JavaScript package declares Node.js >=20 for consumers because EditorConfig 3
 requires Node.js 20 or newer. The maintainer toolchain is intentionally more
-specific: CI and releases use Node.js 24.22.1 and npm 12.2.2. Consumers do not
+specific: CI and releases use Node.js 24.22.3 and npm 12.2.2. Consumers do not
 need the maintainer npm version to use the library.
 
 The `packageManager` field in `package.json` owns the npm pin. Run
