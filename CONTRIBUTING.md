@@ -11,12 +11,12 @@ Fixes and enhancements are totally welcome.  We prefer you to file an issue befo
 
 * bash
 * make
-* Node.js 24.22.1 for development, CI, and releases, with repository-local npm 12.2.1
+* Node.js 24.22.1 for development, CI, and releases, with repository-local npm 12.2.2
 * python - v3.7 or greater (with pip)
 
 The JavaScript package declares Node.js >=20 for consumers because EditorConfig 3
 requires Node.js 20 or newer. The maintainer toolchain is intentionally more
-specific: CI and releases use Node.js 24.22.1 and npm 12.2.1. Consumers do not
+specific: CI and releases use Node.js 24.22.1 and npm 12.2.2. Consumers do not
 need the maintainer npm version to use the library.
 
 The `packageManager` field in `package.json` owns the npm pin. Run
@@ -36,11 +36,10 @@ permissions. After reviewing a newly introduced dependency's scripts, use
 `./tools/npm install-scripts approve <package>`, and commit the resulting pinned
 approval. Run `./tools/npm rebuild` to execute the reviewed scripts.
 
-As verified on 2026-10-22, the registry's `latest` tag still selects npm 12.2.0,
-while `next-12` selects 12.2.1. This repository explicitly pins the
-[non-prerelease 12.2.1 release](https://github.com/npm/cli/releases/tag/v12.2.1)
-because it includes [bundled dependency security fixes](https://github.com/npm/cli/pull/10088)
-missing from 12.2.0. Do not replace the exact pin with a moving dist-tag.
+This repository explicitly pins the
+[npm 12.2.2 release](https://github.com/npm/cli/releases/tag/v12.2.2), which
+includes fixes for bundled dependency security advisories. Keep the exact
+version pin; do not replace it with a moving dist-tag.
 
 npm 12 rejects unknown or abbreviated CLI flags. Use full documented flag names
 and `--` before arguments forwarded to another command. Its `view --json` output
